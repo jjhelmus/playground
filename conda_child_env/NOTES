@@ -1,0 +1,48 @@
+
+
+Create the enviroments
+-----------------------
+conda create -p parent python=3.10 pip
+conda create -p child
+
+conda run -p parent python -m venv --without-pip --system-site-packages ./child
+
+Activate the enviroments
+------------------------
+conda activate parent
+conda activate --stack child
+
+
+/Users/jhelmus/mc/envs/parent/lib/python3.10/site-packages
+/Users/jhelmus/mc/envs/child/lib/python3.10/site-packages
+
+ln -s /Users/jhelmus/play/child_conda_envs/conda-child-stuff.pth conda-child-stuff.pth
+
+
+Questions
+--------
+What directory does pip install into?
+    sysconfig.get_paths("posix_prefix")
+
+Can we use site's venv support to layer?
+    Perhaps but synlinks to the parent python{3,3.x} are needed along with a
+    pyvenv.cfg file. Maybe also pip{3,310} files and other entrypoints?
+
+
+Where in site.py are .pth file processed?
+Does conda provide install hooks we can use? 
+    Is the dependency graph accessible?
+
+
+ToDo's
+-----
+
+
+Ideas
+
+Child enviroments should contain a link to conda-meta which refers to the
+parent env.  Conda loads the prefix data from that enviroment but marks the
+packages as unmanagable/frozen.
+
+Without this conda will remove all packages in site-packages on load because
+the files do not exist
