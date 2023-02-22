@@ -1,0 +1,32 @@
+Add conda child subcommand to conda directly or as a plugin.
+
+Add a new "from_parent_environment" package type that cannot be removed or updated in conda.
+
+Used this type rather than "virtual_system" in the conda-meta.
+
+Either:
+    Read the conda-meta from the parent environment and modify the fields when read.
+
+    Write the modified conda-meta from the parent enviroment into the child and
+    write an appropriate entry in history.
+
+Check before performing the python environment linking to check that python is
+installed.
+
+Manually create python link rather than using python -m venv
+
+Create an conda-meta entry for the symlinked python{3,3.X} files $CHILD/bin as
+well as pyvenv.cfg
+
+Hook into conda so that conda install ... installs the dependency tree into the
+child environment while trucating the tree at python. This might not be necessay
+if the ideas below work.
+
+Create symlinks in $CHILD/lib to allow dynamic library loading via rpath?
+
+Create symlinks for non-python executables in $CHILD/bin?
+
+Do prefix replacement on Python scripts in $CHILD/bin so that $CHILD/bin/python
+is useded.
+
+Figure out if any of this works on Windows.
